@@ -20,5 +20,15 @@ var AppView = Backbone.View.extend({
     }
 });
 
+// Model
+var app = {};
+app.Todo = Backbone.Model.extend({
+    // Note that it is a class that represents the data model, not an instance
+    defaults: {
+        title: '',
+        completes: false
+    }
+});
+
 // instantiating view
 var appView = new AppView();
