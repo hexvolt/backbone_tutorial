@@ -30,5 +30,14 @@ app.Todo = Backbone.Model.extend({
     }
 });
 
+// Collection
+app.TodoList = Backbone.Collection.extend({
+    model: app.Todo,
+    localStorage: new Store("backbone-todo")
+    // normally here should be specified an URL of the backend data storage
+});
+app.todoList = new app.TodoList();  // global instance of the collection
+
+
 // instantiating view
 var appView = new AppView();
