@@ -1,3 +1,14 @@
-/**
- * Created by hexvolt on 09.08.16.
- */
+var AppView = Backbone.View.extend({
+
+    el: '#container',
+
+    initialize: function(){
+        this.render();
+    },
+
+    render: function(){
+        this.$el.html("Hello World");
+    }
+});
+
+var appView = new AppView();
