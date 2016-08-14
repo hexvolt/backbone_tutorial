@@ -176,13 +176,11 @@ app.Router = Backbone.Router.extend({
         '*filter': 'setFilter'
     },
     setFilter: function(params) {
-        if (params) {
-            console.log('app.router.params = ' + params);
-            window.filter = params.trim();
-            // important to trigger reset *after* setting the window.filter,
-            // since reset() starts a collection re-fetch and re-rendering
-            app.collectionTodoList.trigger('reset');
-        }
+        console.log('app.router.params = ' + params);
+        window.filter = params ? params.trim() : '';
+        // important to trigger reset *after* setting the window.filter,
+        // since reset() starts a collection re-fetch and re-rendering
+        app.collectionTodoList.trigger('reset');
     }
 });
 
