@@ -39,5 +39,16 @@ app.TodoList = Backbone.Collection.extend({
 app.todoList = new app.TodoList();  // global instance of the collection
 
 
+// View
+app.TodoView = Backbone.View.extend({
+    tagName: 'li',      // will be wrapped into <li>
+    template: _.template($('#item-template').html()),
+    render: function(){
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    }
+});
+
+
 // instantiating view
 var appView = new AppView();
