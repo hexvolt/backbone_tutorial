@@ -1,15 +1,15 @@
-var AppView = Backbone.View.extend({
-    // This is a basic view which contains:
+var ExampleView = Backbone.View.extend({
+    // This is an example of basic view which contains:
     // - `el` (html element this view is bound to)
     // - template (will be rendered to the el)
     // - initialize (a method that will be called when a view get instantiated)
     // - render (a method that renders template with the data and
     //           inserts it into html)
 
-    el: '#container',
+    el: '#container',   // which element this view will work with
     template: _.template("<h3>Hello, <%= user %></h3>"),
 
-    initialize: function(){
+    initialize: function(){     // get called automatically on instantiation
         this.render();
     },
 
@@ -20,8 +20,9 @@ var AppView = Backbone.View.extend({
     }
 });
 
-// Model
 var app = {};
+
+// Model
 app.Todo = Backbone.Model.extend({
     // Note that it is a class that represents the data model, not an instance
     defaults: {
@@ -49,6 +50,35 @@ app.TodoView = Backbone.View.extend({
     }
 });
 
+app.AppView = Backbone.View.extend({
+
+    el: '#todoapp',
+
+    initialize: function() {
+
+    },
+
+    events: {
+
+    },
+    // methods
+
+    createTodoOnEnter: function() {
+
+    },
+
+    addOne: function() {
+
+    },
+
+    addAll: function() {
+
+    },
+
+    getNewAttributes: function() {
+
+    }
+});
 
 // instantiating view
-var appView = new AppView();
+app.appView = new app.AppView();
