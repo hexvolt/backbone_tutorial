@@ -44,9 +44,43 @@ app.collectionTodoList = new app.TodoListCollection();  // global instance of th
 app.TodoView = Backbone.View.extend({
     tagName: 'li',      // will be wrapped into <li>
     template: _.template(this.$('#item-template').html()),
+    initialize: function() {
+        //re-render element after each update
+        this.model.on('change', this.render, this);
+    },
     render: function(){
         this.$el.html(this.template(this.model.toJSON()));
+
+        // assigning it here because input get added dynamically when rendering
+        this.inputEdit = this.$('.edit');
         return this;
+    },
+
+    events: {
+        'dblclick label': 'edit',
+        'keypress .edit': 'updateOnEnter',
+        'blur .edit': 'close'
+    },
+
+    edit: function() {
+        // show editing input and hide label
+        this.$el.addClass('editing');
+        this.inputEdit.focus();
+    },
+
+    close: function() {
+        // save the changes in appropriate model and hide editing input
+        var value = this.inputEdit.val().trim();
+
+        if (value)
+            this.model.save({title: value});
+
+        this.$el.removeClass('editing');
+    },
+
+    updateOnEnter: function(e) {
+        if (e.which == 13)
+            this.close();
     }
 });
 
