@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Backbone.js tutorial</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css">
 </head>
 <body>
 
@@ -27,6 +28,7 @@
     <script type="text/template" id="item-template">
         <div class="view">
             <label><input type="checkbox" class="toggle"><%- title %></label>
+            <input class="edit" value="<%- title %>">
         </div>
     </script>
 
