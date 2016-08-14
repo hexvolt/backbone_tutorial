@@ -37,8 +37,20 @@ app.TodoModel = Backbone.Model.extend({
 // Collection
 app.TodoListCollection = Backbone.Collection.extend({
     model: app.TodoModel,
-    localStorage: new Store("backbone-todo")
+
     // normally here should be specified an URL of the backend data storage
+    localStorage: new Store("backbone-todo"),
+
+    completed: function() {
+        return this.filter(function(item) {
+            return item.get('completed');
+        });
+    },
+
+    pending: function() {
+        return this.without.apply(this, this.completed());
+    }
+
 });
 app.collectionTodoList = new app.TodoListCollection();  // global instance of the collection
 
@@ -135,7 +147,19 @@ app.AppView = Backbone.View.extend({
     addAll: function() {
         // re-render an entire list based on the current collection content
         this.elTodoList.html('');
-        app.collectionTodoList.each(this.addOne, this);
+        switch (window.filter) {
+            case 'pending':
+                _.each(app.collectionTodoList.pending(), this.addOne, this);
+                break;
+
+            case 'completed':
+                _.each(app.collectionTodoList.completed(), this.addOne, this);
+                break;
+
+            default:
+                app.collectionTodoList.each(this.addOne, this);
+                break;
+        }
     },
 
     getCleanedAttributes: function() {
@@ -146,5 +170,27 @@ app.AppView = Backbone.View.extend({
     }
 });
 
-// instantiating view
+// Router
+app.Router = Backbone.Router.extend({
+    routes: {
+        '*filter': 'setFilter'
+    },
+    setFilter: function(params) {
+        if (params) {
+            console.log('app.router.params = ' + params);
+            window.filter = params.trim();
+            // important to trigger reset *after* setting the window.filter,
+            // since reset() starts a collection re-fetch and re-rendering
+            app.collectionTodoList.trigger('reset');
+        }
+    }
+});
+
+// main initialization
+app.router = new app.Router();
 app.appView = new app.AppView();
+
+// better to call this after the main view initialization where all
+// the events binding perform
+Backbone.history.start();
+
