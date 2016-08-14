@@ -27,7 +27,10 @@ app.TodoModel = Backbone.Model.extend({
     // Note that it is a class that represents the data model, not an instance
     defaults: {
         title: '',
-        completes: false
+        completed: false
+    },
+    toggle: function() {
+        this.save({ completed: !this.get('completed')});
     }
 });
 
@@ -47,6 +50,7 @@ app.TodoView = Backbone.View.extend({
     initialize: function() {
         //re-render element after each update
         this.model.on('change', this.render, this);
+        this.model.on('destroy', this.remove, this);
     },
     render: function(){
         this.$el.html(this.template(this.model.toJSON()));
@@ -59,13 +63,19 @@ app.TodoView = Backbone.View.extend({
     events: {
         'dblclick label': 'edit',
         'keypress .edit': 'updateOnEnter',
-        'blur .edit': 'close'
+        'blur .edit': 'close',
+        'click .destroy': 'destroy',
+        'click .toggle': 'toggle'
     },
 
     edit: function() {
         // show editing input and hide label
         this.$el.addClass('editing');
         this.inputEdit.focus();
+    },
+
+    toggle: function() {
+        this.model.toggle();
     },
 
     close: function() {
@@ -76,6 +86,10 @@ app.TodoView = Backbone.View.extend({
             this.model.save({title: value});
 
         this.$el.removeClass('editing');
+    },
+
+    destroy: function() {
+        this.model.destroy();
     },
 
     updateOnEnter: function(e) {
